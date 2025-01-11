@@ -40,7 +40,8 @@ jobs:
           ssh-keyscan -H ${{ secrets.SSH_HOST }} > ~/.ssh/known_hosts
           
       - name: Deploy
-        run: ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa nik07@130.193.35.163 "cd lab1-template && git pull && sudo docker compose -f docker-compose.yml down && sudo docker compose -f docker-compose.yml up -d --build"
+        #run: ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa nik07@130.193.35.163 "cd lab1-template && git pull && sudo docker compose -f docker-compose.yml down && sudo docker compose -f docker-compose.yml up -d --build"
+        run: ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa nik07@130.193.35.163 "cd lab1-template && git pull"
           
       - name: Run API Tests
         uses: matt-ball/newman-action@master
