@@ -16,6 +16,7 @@ namespace Lab
         [HttpGet(Name = "/persons/")]
         public IEnumerable<Person> Get()
         {
+            return [new Person()];
             var repo = new PostgresRepository();
 
             repo.Add(new Person());
