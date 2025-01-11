@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - master
+      - lab_01
   pull_request:
     branches:
       - master
@@ -16,6 +17,18 @@ jobs:
           fetch-depth: 0
 
       # TODO build, test and deploy project
+
+      - name: Setup .NET 8.x
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '8.x'
+          cache: true
+
+      - name: Install dependencies
+        run: dotnet add package Npgsql --version 9.0.2
+
+      - name: Build
+        run: dotnet build
 
       - name: Run API Tests
         uses: matt-ball/newman-action@master
