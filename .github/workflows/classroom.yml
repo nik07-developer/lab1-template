@@ -22,7 +22,6 @@ jobs:
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: '8.x'
-          cache: true
 
       - name: Install dependencies
         run: dotnet add package Npgsql --version 9.0.2
