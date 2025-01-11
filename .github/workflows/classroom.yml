@@ -24,7 +24,7 @@ jobs:
           dotnet-version: '8.x'
 
       - name: Install dependencies
-        run: dotnet add package Npgsql --version 9.0.2
+        run: dotnet add src.csproj package Npgsql --version 9.0.2
 
       - name: Build
         run: dotnet build
