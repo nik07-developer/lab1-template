@@ -26,7 +26,40 @@ jobs:
         run: dotnet add src package Npgsql --version 9.0.2
 
       - name: Build
-        run: dotnet build src
+        run: dotnet build src --configuration Release
+
+      - name: Publish
+        run: dotnet publish src --configuration Release --output ./output
+
+      - name: Deploy to Server
+        env:
+          HOST: ${{ secrets.SSH_HOST }}
+          USERNAME: ${{ secrets.SSH_USER }}
+        run: |
+          echo "Deploying to server..."
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > private_key
+          chmod 600 private_key
+
+          docker build -t myapp:latest ./output
+
+          ssh -o StrictHostKeyChecking=no -i private_key $USERNAME@$HOST << 'EOF'
+          
+            if ! command -v docker &> /dev/null
+            then
+                echo "Docker не установлен. Установите Docker перед продолжением."
+                exit 1
+            fi
+            
+            if [ "$(docker ps -q -f name=myapp)" ]; then
+              docker stop myapp
+              docker rm myapp
+            fi
+            
+            docker run -d --name myapp -p 80:80 myapp:latest
+            echo "Deploying Finished"
+          EOF
+
+          
 
       - name: Run API Tests
         uses: matt-ball/newman-action@master
