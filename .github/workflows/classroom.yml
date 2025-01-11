@@ -3,7 +3,6 @@ on:
   push:
     branches:
       - master
-      - lab_01
   pull_request:
     branches:
       - master
@@ -26,11 +25,8 @@ jobs:
       - name: Install dependencies
         run: dotnet add src package Npgsql --version 9.0.2
 
-      - name: Build proj
-        run: dotnet build src
-
-      - name: Build sln
-        run: dotnet build lab1-template
+      - name: Build
+        run: dotnet build srс
 
       - name: Run API Tests
         uses: matt-ball/newman-action@master
