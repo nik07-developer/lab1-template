@@ -40,9 +40,18 @@ jobs:
           ssh-keyscan -H ${{ secrets.SSH_HOST }} > ~/.ssh/known_hosts
           
       - name: Deploy
-        #run: ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa nik07@130.193.35.163 "cd lab1-template && git pull && sudo docker compose -f docker-compose.yml down && sudo docker compose -f docker-compose.yml up -d --build"
-        run: ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa nik07@130.193.35.163 "cd lab1-template && git pull"
-          
+        uses: D3rHase/ssh-command-action@v0.2.2
+        with:
+          host: ${{secrets.SSH_HOST}}
+          user: ${{secrets.SSH_USER}}
+          private_key: ${{secrets.SSH_PRIVATE_KEY}}
+          command: |
+            cd lab1-template;
+            git checkout master;
+            git pull;
+            sudo docker compose -f docker-compose.yml down;
+            sudo docker compose -f docker-compose.yml up -d --build;
+            
       - name: Run API Tests
         uses: matt-ball/newman-action@master
         with:
