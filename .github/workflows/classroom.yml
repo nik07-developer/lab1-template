@@ -26,7 +26,7 @@ jobs:
         run: dotnet add src package Npgsql --version 9.0.2
 
       - name: Build
-        run: dotnet build srс
+        run: dotnet build src
 
       - name: Run API Tests
         uses: matt-ball/newman-action@master
