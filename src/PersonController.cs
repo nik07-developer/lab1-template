@@ -34,7 +34,7 @@ namespace Lab
         }
 
         [HttpPost("/api/v1/persons/")]
-        public ActionResult Post([FromBody] Person person)
+        public ActionResult Post([FromBody] PersonRequestDto person)
         {
             var repo = new PostgresRepository();
             var id = repo.Add(person);
@@ -52,7 +52,7 @@ namespace Lab
         }
 
         [HttpPatch("/api/v1/persons/{personId}")]
-        public ActionResult Patch([FromRoute] int personId, [FromBody] Person person)
+        public ActionResult Patch([FromRoute] int personId, [FromBody] PersonRequestDto person)
         {
             var repo = new PostgresRepository();
             repo.Replace(personId, person);

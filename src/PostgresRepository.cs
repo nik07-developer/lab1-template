@@ -17,7 +17,7 @@ namespace Lab
             _connectionString = $"Server={Host};Username={User};Database={DBname};Port={Port};Password={Password};SSLMode=Prefer";
         }
 
-        public int Add(Person person)
+        public int Add(PersonRequestDto person)
         {
             using var conn = new NpgsqlConnection(_connectionString);
             conn.Open();
@@ -108,7 +108,7 @@ namespace Lab
             conn.Close();
         }
 
-        public int Replace(int id, Person person)
+        public int Replace(int id, PersonRequestDto person)
         {
             using var conn = new NpgsqlConnection(_connectionString);
             conn.Open();
