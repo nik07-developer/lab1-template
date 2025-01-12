@@ -42,7 +42,8 @@ namespace Lab
             var repo = new PostgresRepository();
             var id = repo.Add(person);
 
-            return new CreatedResult($"/api/v1/persons/{id}", null);
+
+            return new CreatedResult($"http://localhost:8080/api/v1/persons/{id}", null);
         }
 
         [IgnoreAntiforgeryToken]
