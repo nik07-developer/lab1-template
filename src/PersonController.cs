@@ -13,6 +13,7 @@ namespace Lab
             _logger = logger;
         }
 
+        [IgnoreAntiforgeryToken]
         [HttpGet("/api/v1/persons/{personId}")]
         public ActionResult<Person> Get([FromRoute] int personId)
         {
@@ -26,6 +27,7 @@ namespace Lab
             return NotFound();
         }
 
+        [IgnoreAntiforgeryToken]
         [HttpGet("/api/v1/persons/")]
         public ActionResult<List<Person>> GetAll()
         {
@@ -33,6 +35,7 @@ namespace Lab
             return Ok(repo.GetAll());
         }
 
+        [IgnoreAntiforgeryToken]
         [HttpPost("/api/v1/persons/")]
         public ActionResult Post([FromBody] PersonRequestDto person)
         {
@@ -42,6 +45,7 @@ namespace Lab
             return new CreatedResult($"/api/v1/persons/{id}", null);
         }
 
+        [IgnoreAntiforgeryToken]
         [HttpDelete("/api/v1/persons/{personId}")]
         public ActionResult Delete([FromRoute]int personId)
         {
@@ -51,6 +55,7 @@ namespace Lab
             return Ok();
         }
 
+        [IgnoreAntiforgeryToken]
         [HttpPatch("/api/v1/persons/{personId}")]
         public ActionResult Patch([FromRoute] int personId, [FromBody] PersonRequestDto person)
         {

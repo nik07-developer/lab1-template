@@ -19,6 +19,10 @@ namespace Lab
 
         public int Add(PersonRequestDto person)
         {
+            person.Age ??= 18;
+            person.Address ??= string.Empty;
+            person.Work ??= string.Empty;
+
             using var conn = new NpgsqlConnection(_connectionString);
             conn.Open();
 
@@ -110,6 +114,10 @@ namespace Lab
 
         public int Replace(int id, PersonRequestDto person)
         {
+            person.Age ??= 18;
+            person.Address ??= string.Empty;
+            person.Work ??= string.Empty;
+
             using var conn = new NpgsqlConnection(_connectionString);
             conn.Open();
 
