@@ -28,6 +28,12 @@ jobs:
       - name: Build
         run: dotnet build src --configuration Release
 
+      - name: Run Docker
+        timeout-minutes: 5
+        run: |
+            sudo docker compose -f docker-compose.yml down;
+            sudo docker compose -f docker-compose.yml up -d --build;
+
       - name: Run API Tests
         uses: matt-ball/newman-action@master
         with:
