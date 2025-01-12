@@ -27,6 +27,21 @@ jobs:
 
       - name: Build
         run: dotnet build src --configuration Release
+        
+      - name: Run Docker
+        timeout-minutes: 5
+        run: |
+            sudo docker compose -f docker-compose.yml down;
+            sudo docker compose -f docker-compose.yml up -d --build;
+            docker ps -a
+
+      - name: Run API Tests
+        uses: matt-ball/newman-action@master
+        with:
+          collection: postman/[inst] Lab1.postman_collection.json
+          environment: postman/[inst][local] Lab1.postman_environment.json
+          delayRequest: 100
+          reporters: '[ "cli" ]'
 
   deploy:
     runs-on: ubuntu-latest
@@ -54,6 +69,9 @@ jobs:
             sudo docker compose -f docker-compose.yml up -d --build;
             exit;
 
+      - name: Pre Test Run
+        run: ls
+        
       - name: Run API Tests
         uses: matt-ball/newman-action@master
         with:
