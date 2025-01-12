@@ -42,7 +42,6 @@ namespace Lab
             var repo = new PostgresRepository();
             var id = repo.Add(person);
 
-
             return new CreatedResult($"http://localhost:8080/api/v1/persons/{id}", null);
         }
 
@@ -53,17 +52,20 @@ namespace Lab
             var repo = new PostgresRepository();
             repo.Delete(personId);
 
-            return Ok();
+            return NoContent();
         }
 
         [IgnoreAntiforgeryToken]
         [HttpPatch("/api/v1/persons/{personId}")]
-        public ActionResult Patch([FromRoute] int personId, [FromBody] PersonRequestDto person)
+        public ActionResult<PersonRequestDto> Patch([FromRoute] int personId, [FromBody] PersonRequestDto person)
         {
             var repo = new PostgresRepository();
-            repo.Replace(personId, person);
+            if (repo.Update(personId, person, out var updated))
+            {
+                return Ok(updated);
+            }
 
-            return Ok();
+            return NotFound();
         }
     }
 }

@@ -28,10 +28,10 @@ namespace Lab
 
             using var command = new NpgsqlCommand("insert into person (name, age, address, work) values (@n1, @n2, @n3, @n4) returning id", conn);
 
-            command.Parameters.AddWithValue("n1", $"'{person.Name}'");
+            command.Parameters.AddWithValue("n1", $"{person.Name}");
             command.Parameters.AddWithValue("n2", person.Age);
-            command.Parameters.AddWithValue("n3", $"'{person.Address}'");
-            command.Parameters.AddWithValue("n4", $"'{person.Work}'");
+            command.Parameters.AddWithValue("n3", $"{person.Address}");
+            command.Parameters.AddWithValue("n4", $"{person.Work}");
 
             int id = (int)command.ExecuteScalar();
 
@@ -96,7 +96,6 @@ namespace Lab
                 isFound = true;
             }
 
-
             reader.Close();
             return isFound;
         }
@@ -112,28 +111,46 @@ namespace Lab
             conn.Close();
         }
 
-        public int Replace(int id, PersonRequestDto person)
+        public bool Update(int id, PersonRequestDto person, out Person updated)
         {
-            person.Age ??= 18;
-            person.Address ??= string.Empty;
-            person.Work ??= string.Empty;
+            bool isFound = false;
+            updated = null;
 
             using var conn = new NpgsqlConnection(_connectionString);
             conn.Open();
 
-            using var command = new NpgsqlCommand("update person set name = @n1, age = @n2, address = @n3, work = @n4 where id = @n0;", conn);
+            string update = $"id={id}";
 
-            command.Parameters.AddWithValue("n0", id);
-            command.Parameters.AddWithValue("n1", $"'{person.Name}'");
-            command.Parameters.AddWithValue("n2", person.Age);
-            command.Parameters.AddWithValue("n3", $"'{person.Address}'");
-            command.Parameters.AddWithValue("n4", $"'{person.Work}'");
+            if (person.Name != null) update += $", name='{person.Name}'";
+            if (person.Age != null) update += $", age={person.Age}";
+            if (person.Address != null) update += $", address='{person.Address}'";
+            if (person.Work != null) update += $", work='{person.Work}'";
 
-            command.ExecuteNonQuery();
+            var cmdStr = $"update person set {update} where id={id} returning *";
 
+            using var command = new NpgsqlCommand(cmdStr, conn);
+
+            var reader = command.ExecuteReader();
+
+            if (reader.HasRows)
+            {
+                reader.Read();
+
+                updated = new Person()
+                {
+                    Id = reader.GetInt32(0),
+                    Name = reader.GetString(1),
+                    Age = reader.GetInt32(2),
+                    Address = reader.GetString(3),
+                    Work = reader.GetString(4),
+                };
+
+                isFound = true;
+            }
+
+            reader.Close();
             conn.Close();
-
-            return id;
+            return isFound;
         }
     }
 }
