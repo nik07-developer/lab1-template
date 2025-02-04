@@ -62,7 +62,7 @@ jobs:
         run: ls .
 
       - name: Pre Test Run 3
-        run: cd postman
+        run: cd ./postman
         
       - name: Run API Tests
         uses: matt-ball/newman-action@master
