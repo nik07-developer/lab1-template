@@ -32,6 +32,10 @@ jobs:
     runs-on: ubuntu-latest
     needs: [ build ]
     steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          
       - name: Keygen
         run: |
           echo "Deploying to server..."
@@ -67,8 +71,8 @@ jobs:
       - name: Run API Tests
         uses: matt-ball/newman-action@master
         with:
-          collection: ./postman/[inst] Lab1.postman_collection.json
-          environment: ./postman/[inst][heroku] Lab1.postman_environment.json
+          collection: postman/[inst] Lab1.postman_collection.json
+          environment: postman/[inst][heroku] Lab1.postman_environment.json
           delayRequest: 100
           reporters: '[ "cli" ]'
 
