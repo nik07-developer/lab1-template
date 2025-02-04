@@ -4,13 +4,13 @@ namespace Lab
 {
     public class PostgresRepository
     {
-        private static string Host = "postgres";
-        private static string User = "postgres";
-        private static string DBname = "postgres";
-        private static string Password = "\"postgres\"";
-        private static string Port = "5432";
+        private static readonly string Host = "postgres";
+        private static readonly string User = "postgres";
+        private static readonly string DBname = "postgres";
+        private static readonly string Password = "postgres";
+        private static readonly string Port = "5432";
 
-        private string _connectionString;
+        private readonly string _connectionString;
 
         public PostgresRepository()
         {
@@ -33,7 +33,8 @@ namespace Lab
             command.Parameters.AddWithValue("n3", $"{person.Address}");
             command.Parameters.AddWithValue("n4", $"{person.Work}");
 
-            int id = (int)command.ExecuteScalar();
+            var res = command.ExecuteScalar();
+            int id = (int) (res ?? 0);
 
             conn.Close();
 
