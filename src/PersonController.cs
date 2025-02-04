@@ -39,10 +39,17 @@ namespace Lab
         [HttpPost("/api/v1/persons/")]
         public ActionResult Post([FromBody] PersonRequestDto person)
         {
-            var repo = new PostgresRepository();
-            var id = repo.Add(person);
-
-            return new CreatedResult($"http://localhost:8080/api/v1/persons/{id}", null);
+            try
+            {
+                var repo = new PostgresRepository();
+                var id = repo.Add(person);
+                return new CreatedResult($"http://localhost:8080/api/v1/persons/{id}", null);
+            }
+            catch
+            {
+                return NotFound();
+            }
+            
         }
 
         [IgnoreAntiforgeryToken]
