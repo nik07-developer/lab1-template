@@ -33,12 +33,13 @@ namespace Lab
             command.Parameters.AddWithValue("n3", $"{person.Address}");
             command.Parameters.AddWithValue("n4", $"{person.Work}");
 
-            var res = command.ExecuteScalar();
-            int id = (int) (res ?? 0);
-
+            var scalar = command.ExecuteScalar();
             conn.Close();
 
-            return id;
+            if (scalar is int x) 
+                return x;
+
+            return 0;
         }
 
         public List<Person> GetAll()
